@@ -62,13 +62,17 @@ mkdir -p %{buildroot}%{_libdir}/pkgconfig
 mkdir -p %{buildroot}%{_includedir}/icamerasrc/interfaces
 mkdir -p %{buildroot}%{_includedir}/gstreamer-1.0/gst
 cp -rp src/.libs/*.so* %{buildroot}%{_libdir}/gstreamer-1.0
-cp -rp src/*.la %{buildroot}%{_libdir}/gstreamer-1.0
+cp src/*.la %{buildroot}%{_libdir}/gstreamer-1.0
 cp -rp src/interfaces/.libs/*.so* %{buildroot}%{_libdir}
-cp -rp src/interfaces/*.la %{buildroot}%{_libdir}
+cp src/interfaces/*.la %{buildroot}%{_libdir}
 cp -rp src/interfaces/*.h %{buildroot}%{_includedir}/icamerasrc/interfaces
 cp -rp src/interfaces/*.h %{buildroot}%{_includedir}/gstreamer-1.0/gst
 cp -rp src/gst/gstcamerasrcmeta.h %{buildroot}%{_includedir}/gstreamer-1.0/gst
-sed 's/^prefix=\/.\+$/prefix=\/usr/' libgsticamerasrc.pc > %{buildroot}%{_libdir}/pkgconfig/libgsticamerasrc.pc
+cp -rp libgsticamerasrc.pc %{buildroot}%{_libdir}/pkgconfig/libgsticamerasrc.pc
+sed -i \
+    -e "s/^libdir=\/usr\/lib$/libdir=\/usr\/lib64/" \
+    -e "s/^prefix=\/.\+$/prefix=\/usr/" \
+    %{buildroot}%{_libdir}/pkgconfig/libgsticamerasrc.pc
 
 chrpath -d %{buildroot}%{_libdir}/gstreamer-1.0/libgsticamerasrc.so
 
