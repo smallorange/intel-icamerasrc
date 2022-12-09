@@ -1,3 +1,5 @@
+#ignore rpath check for a invalid path
+%global __brp_check_rpaths %{nil}
 %global commit 3b7cdb93071360aacebb4e808ee71bb47cf90b30
 %global commitdate 20220926
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
@@ -12,6 +14,7 @@ Source0: https://github.com/intel/%{name}/archive/%{commit}/%{name}-%{shortcommi
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  chrpath
+BuildRequires:  patchelf
 BuildRequires:  ipu6-camera-bins
 BuildRequires:  ipu6-camera-bins-devel
 BuildRequires:  ipu6-camera-hal
@@ -25,12 +28,12 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 
+ExclusiveArch:  x86_64
+
 Requires:       ipu6-camera-bins
 Requires:       ipu6-camera-hal
 Requires:       gstreamer1-plugins-base
 Requires:       libdrm
-
-ExclusiveArch:  x86_64
 
 %description
 This package provide the gstreamer plugin for MIPI cameras.
@@ -74,14 +77,21 @@ sed -i \
     -e "s/^prefix=\/.\+$/prefix=\/usr/" \
     %{buildroot}%{_libdir}/pkgconfig/libgsticamerasrc.pc
 
-chrpath -d %{buildroot}%{_libdir}/gstreamer-1.0/libgsticamerasrc.so
+chrpath --delete %{buildroot}%{_libdir}/gstreamer-1.0/libgsticamerasrc.so
+patchelf --set-rpath %{_rundir} %{buildroot}%{_libdir}/gstreamer-1.0/libgsticamerasrc.so
+patchelf --set-rpath %{_rundir} %{buildroot}%{_libdir}/libgsticamerainterface-1.0.so.1.0.0
 
 %files
 %license LICENSE
+%dir %{_libdir}/gstreamer-1.0
 %{_libdir}/gstreamer-1.0/*
 %{_libdir}/*
 
 %files devel
+%dir %{_includedir}/icamerasrc
+%dir %{_includedir}/icamerasrc/interfaces
+%dir %{_includedir}/gstreamer-1.0
+%dir %{_includedir}/gstreamer-1.0/gst
 %{_includedir}/icamerasrc/interfaces/*
 %{_includedir}/gstreamer-1.0/gst/*
 
