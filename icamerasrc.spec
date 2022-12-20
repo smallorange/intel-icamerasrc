@@ -5,12 +5,12 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           icamerasrc
-Summary:        Gstreamer plugin for Intel IPU6
+Summary:        GStreamer plugin for Intel IPU6
 Version:        0.0
-Release:        1.%{commitdate}git%{shortcommit}%{?dist}
-License:        GNU
+Release:        2.%{commitdate}git%{shortcommit}%{?dist}
+License:        LGPLv2
 
-Source0: https://github.com/intel/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        https://github.com/intel/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  chrpath
@@ -33,19 +33,19 @@ ExclusiveArch:  x86_64
 Requires:       ipu6-camera-bins
 Requires:       ipu6-camera-hal
 Requires:       gstreamer1-plugins-base
-Requires:       libdrm
+Requires:       libdrm >= 2.4.114
 
 %description
-This package provide the gstreamer plugin for MIPI cameras.
+This package provides the GStreamer plugin for MIPI camera.
 
 %package devel
 Summary:        Gstreamer plugin development header files for Intel IPU6
+Requires:       ipu6-camera-bins-devel
+Requires:       ipu6-camera-hal-devel
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 This provides the necessary header files for IPU6 Gstreamer plugin development.
-
-Requires:       ipu6-camera-bins-devel
-Requires:       ipu6-camera-hal-devel
 
 %prep
 
@@ -85,7 +85,9 @@ patchelf --set-rpath %{_rundir} %{buildroot}%{_libdir}/libgsticamerainterface-1.
 %license LICENSE
 %dir %{_libdir}/gstreamer-1.0
 %{_libdir}/gstreamer-1.0/*
-%{_libdir}/*
+%{_libdir}/libgsticamerainterface-1.0.so
+%{_libdir}/libgsticamerainterface-1.0.so.1
+%{_libdir}/libgsticamerainterface-1.0.so.1.0.0
 
 %files devel
 %dir %{_includedir}/icamerasrc
@@ -94,7 +96,12 @@ patchelf --set-rpath %{_rundir} %{buildroot}%{_libdir}/libgsticamerainterface-1.
 %dir %{_includedir}/gstreamer-1.0/gst
 %{_includedir}/icamerasrc/interfaces/*
 %{_includedir}/gstreamer-1.0/gst/*
+%{_libdir}/pkgconfig/*
 
 %changelog
+* Tue Dec 20 2022 Kate Hsuan <hpa@redhat.com> - 0.0-2.20220926git3b7cdb9
+- File placement fixes
+- Format for style fixes
+
 * Tue Nov 29 2022 Kate Hsuan <hpa@redhat.com> - 0.0-1.20220926git3b7cdb9
 - First commit
