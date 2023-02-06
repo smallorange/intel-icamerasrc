@@ -7,7 +7,7 @@
 Name:           icamerasrc
 Summary:        GStreamer plugin for Intel IPU6
 Version:        0.0
-Release:        2.%{commitdate}git%{shortcommit}%{?dist}
+Release:        3.%{commitdate}git%{shortcommit}%{?dist}
 License:        LGPLv2
 
 Source0:        https://github.com/intel/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
@@ -15,9 +15,7 @@ Source0:        https://github.com/intel/%{name}/archive/%{commit}/%{name}-%{sho
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  chrpath
 BuildRequires:  patchelf
-BuildRequires:  ipu6-camera-bins
 BuildRequires:  ipu6-camera-bins-devel
-BuildRequires:  ipu6-camera-hal
 BuildRequires:  ipu6-camera-hal-devel
 BuildRequires:  gcc
 BuildRequires:  g++
@@ -39,13 +37,13 @@ Requires:       libdrm >= 2.4.114
 This package provides the GStreamer plugin for MIPI camera.
 
 %package devel
-Summary:        Gstreamer plugin development header files for Intel IPU6
+Summary:        GStreamer plugin development header files for Intel IPU6
 Requires:       ipu6-camera-bins-devel
 Requires:       ipu6-camera-hal-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-This provides the necessary header files for IPU6 Gstreamer plugin development.
+This provides the necessary header files for IPU6 GStreamer plugin development.
 
 %prep
 
@@ -54,7 +52,7 @@ This provides the necessary header files for IPU6 Gstreamer plugin development.
 %build
 export CHROME_SLIM_CAMHAL=ON
 export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
-export PKG_CONFIG_PATH="/usr/lib64/ipu6ep/pkgconfig"
+export PKG_CONFIG_PATH="/usr/lib64/pkgconfig"
 ./autogen.sh
 make -j`nproc`
 
@@ -99,6 +97,9 @@ patchelf --set-rpath %{_rundir} %{buildroot}%{_libdir}/libgsticamerainterface-1.
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Tue Dec 20 2022 Kate Hsuan <hpa@redhat.com> - 0.0-3.20220926git3b7cdb9
+- Modify library path for build
+
 * Tue Dec 20 2022 Kate Hsuan <hpa@redhat.com> - 0.0-2.20220926git3b7cdb9
 - File placement fixes
 - Format for style fixes
