@@ -5,12 +5,11 @@
 Name:           gstreamer1-plugins-icamerasrc
 Summary:        GStreamer 1.0 Intel IPU6 camera plug-in
 Version:        0.0
-Release:        4.%{commitdate}git%{shortcommit}%{?dist}
+Release:        5.%{commitdate}git%{shortcommit}%{?dist}
 License:        LGPLv2
 
 Source0:        https://github.com/intel/icamerasrc/archive/%{commit}/icamerasrc-%{shortcommit}.tar.gz
 
-BuildRequires:  systemd-rpm-macros
 BuildRequires:  ipu6-camera-bins-devel
 BuildRequires:  ipu6-camera-hal-devel
 BuildRequires:  gcc
@@ -56,18 +55,21 @@ export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
 
 %files
 %license LICENSE
-%dir %{_libdir}/gstreamer-1.0
 %{_libdir}/gstreamer-1.0/*
 %{_libdir}/libgsticamerainterface-1.0.so
 %{_libdir}/libgsticamerainterface-1.0.so.1
 %{_libdir}/libgsticamerainterface-1.0.so.1.0.0
 
 %files devel
-%dir %{_includedir}/gstreamer-1.0/gst/icamera
 %{_includedir}/gstreamer-1.0/gst/*
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Fri Fed 17 2023 Kate Hsuan <hpa@redhat.com> - 0.0-5.20220926git3b7cdb9
+- A few minor revisions includes
+- Removed unnecessary %dir
+- Removed .so file from devel package
+
 * Wed Feb 15 2023 Kate Hsuan <hpa@redhat.com> - 0.0-4.20220926git3b7cdb9
 - Updated the build and installation scripts
 
