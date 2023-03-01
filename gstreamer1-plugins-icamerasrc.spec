@@ -5,7 +5,7 @@
 Name:           gstreamer1-plugins-icamerasrc
 Summary:        GStreamer 1.0 Intel IPU6 camera plug-in
 Version:        0.0
-Release:        5.%{commitdate}git%{shortcommit}%{?dist}
+Release:        6.%{commitdate}git%{shortcommit}%{?dist}
 License:        LGPLv2
 
 Source0:        https://github.com/intel/icamerasrc/archive/%{commit}/icamerasrc-%{shortcommit}.tar.gz
@@ -23,16 +23,12 @@ BuildRequires:  libtool
 
 ExclusiveArch:  x86_64
 
-Requires:       ipu6-camera-bins
-Requires:       ipu6-camera-hal
-Requires:       gstreamer1-plugins-base
-Requires:       libdrm >= 2.4.114
-
 %description
 This package provides the GStreamer 1.0 plug-in for MIPI camera.
 
 %package devel
 Summary:        GStreamer plug-in development files for Intel IPU6 camera
+Requires:       gstreamer1-devel
 Requires:       ipu6-camera-bins-devel
 Requires:       ipu6-camera-hal-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -56,16 +52,20 @@ export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
 %files
 %license LICENSE
 %{_libdir}/gstreamer-1.0/*
-%{_libdir}/libgsticamerainterface-1.0.so
 %{_libdir}/libgsticamerainterface-1.0.so.1
 %{_libdir}/libgsticamerainterface-1.0.so.1.0.0
 
 %files devel
+%{_libdir}/libgsticamerainterface-1.0.so
 %{_includedir}/gstreamer-1.0/gst/*
 %{_libdir}/pkgconfig/*
 
 %changelog
-* Fri Fed 17 2023 Kate Hsuan <hpa@redhat.com> - 0.0-5.20220926git3b7cdb9
+* Wed Mar 1 2023 Kate Hsuan <hpa@redhat.com> - 0.0-6.20220926git3b7cdb9
+- Fixed requires
+- Fixed directory ownership
+
+* Fri Feb 17 2023 Kate Hsuan <hpa@redhat.com> - 0.0-5.20220926git3b7cdb9
 - A few minor revisions includes
 - Removed unnecessary %dir
 - Removed .so file from devel package
